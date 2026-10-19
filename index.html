@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Aula interativa de Lógica e Linguagem de Programação — Semanas 22 e 23: listas, cadastros, médias, classificação e ranking em Python.">
+  <meta name="color-scheme" content="light dark">
+  <title>Lógica de Programação | Semanas 22 e 23</title>
+  <script>
+    (() => {
+      try {
+        const saved = localStorage.getItem('logic-theme');
+        const systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = saved === 'dark' || saved === 'light' ? saved : (systemDark ? 'dark' : 'light');
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+      } catch (_) {
+        const systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = systemDark ? 'dark' : 'light';
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <div class="reading-progress" aria-hidden="true"><span id="readingProgress"></span></div>
+
+  <header class="topbar" id="topo">
+    <div class="container topbar__inner">
+      <a class="brand" href="#inicio" aria-label="Ir para o início">
+        <span class="brand__mark">Py</span>
+        <span class="brand__text"><strong>Lógica de Programação</strong><small>Semanas 22 + 23</small></span>
+      </a>
+
+      <nav class="nav" id="mainNav" aria-label="Navegação principal">
+        <a href="#inicio">Início</a>
+        <a href="#aula1">Aula 1</a>
+        <a href="#registro1">Registro 1</a>
+        <a href="#aula2">Aula 2</a>
+        <a href="#registro2">Registro 2</a>
+        <a href="#materiais">Materiais</a>
+        <a href="#quiz">Quiz</a>
+      </nav>
+
+      <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false" aria-label="Ativar modo escuro" title="Ativar modo escuro">
+        <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+        <span class="theme-toggle__text">Escuro</span>
+      </button>
+
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mainNav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section class="hero section" id="inicio">
+      <div class="container hero__grid">
+        <div>
+          <span class="eyebrow">2 aulas • 50 minutos cada</span>
+          <h1>Dos <span>dados</span> ao <span>ranking</span></h1>
+          <p class="hero__lead">Uma sequência condensada para entender listas, repetição, cadastro, funções, média, classificação e ordenação em Python — sem tentar reproduzir oito aulas em apenas 100 minutos.</p>
+          <div class="hero__actions">
+            <a class="btn btn--primary" href="#plano">Ver plano das aulas</a>
+            <a class="btn btn--ghost" href="#registro1">Ir para os registros</a>
+          </div>
+          <div class="chips" aria-label="Assuntos principais">
+            <span>Listas</span><span>Índices</span><span>append()</span><span>for</span><span>Funções</span><span>Média</span><span>if/elif/else</span><span>sort()</span><span>Ranking</span>
+          </div>
+        </div>
+
+        <aside class="hero-card" aria-label="Visão geral da trilha">
+          <p class="hero-card__label">TRILHA DE APRENDIZAGEM</p>
+          <div class="flow-stack">
+            <span>Dados</span><b>↓</b><span>Listas</span><b>↓</b><span>Repetição</span><b>↓</b><span>Funções</span><b>↓</b><span>Classificação</span><b>↓</b><span>Ranking</span>
+          </div>
+          <p class="muted">Entender → visualizar → testar → programar → registrar.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section section--soft" id="plano">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Plano condensado</span>
+          <h2>100 minutos com foco no essencial</h2>
+          <p>Os registros recebem código-base para que o estudante pratique a lógica nova, em vez de reconstruir sistemas inteiros durante a aula.</p>
+        </div>
+
+        <div class="plan-grid">
+          <article class="plan-card">
+            <div class="plan-card__top"><span class="lesson-badge">01</span><span>50 min</span></div>
+            <h3>Semana 22 — Listas e cadastros em memória</h3>
+            <ul>
+              <li><strong>5 min</strong> — situação-problema</li>
+              <li><strong>15 min</strong> — listas, índices, append(), for e operações de cadastro</li>
+              <li><strong>25 min</strong> — Registro 1 com código-base</li>
+              <li><strong>5 min</strong> — revisão coletiva</li>
+            </ul>
+          </article>
+          <article class="plan-card">
+            <div class="plan-card__top"><span class="lesson-badge lesson-badge--blue">02</span><span>50 min</span></div>
+            <h3>Semana 23 — Médias, classificação e ranking</h3>
+            <ul>
+              <li><strong>5 min</strong> — situação-problema</li>
+              <li><strong>15 min</strong> — média, condicionais, funções e ordenação</li>
+              <li><strong>25 min</strong> — Registro 2 com código-base</li>
+              <li><strong>5 min</strong> — fechamento da trilha</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="aula1">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Aula 1 • Semana 22</span>
+          <h2>Agenda e cadastros em memória</h2>
+          <p>Como um programa consegue guardar vários produtos enquanto está funcionando sem usar banco de dados ou arquivo?</p>
+        </div>
+
+        <div class="analogy-box">
+          <div class="analogy-box__icon" aria-hidden="true">🗄️</div>
+          <div><strong>Analogia: lista = prateleira temporária.</strong><p>Enquanto o programa está aberto, os itens permanecem disponíveis na memória. Se o programa encerrar sem salvá-los em arquivo, esses dados desaparecem.</p></div>
+        </div>
+
+        <div class="concept-grid">
+          <article class="concept-card"><span class="concept-icon">[ ]</span><h3>Lista</h3><p>Guarda vários valores sob um único nome e permite adicionar novos elementos durante a execução.</p></article>
+          <article class="concept-card"><span class="concept-icon">0</span><h3>Índice</h3><p>Cada item ocupa uma posição. Em Python, a primeira posição de uma lista é o índice <code>0</code>.</p></article>
+          <article class="concept-card"><span class="concept-icon">+</span><h3>append()</h3><p>Adiciona um novo elemento ao final da lista.</p></article>
+          <article class="concept-card"><span class="concept-icon">↻</span><h3>for</h3><p>Percorre os elementos, permitindo consultar, listar ou processar cada item.</p></article>
+        </div>
+
+        <div class="code-explainer">
+          <div class="code-explainer__head">
+            <div><span class="tag">CÓDIGO → O QUE ACONTECE → RESULTADO</span><h3>Guardando produtos em uma lista</h3></div>
+            <button class="copy-btn" type="button" data-copy="listCode">Copiar código</button>
+          </div>
+          <pre><code id="listCode">produtos = []
+
+produtos.append("Caneta")
+produtos.append("Caderno")
+produtos.append("Borracha")</code></pre>
+          <div class="result-strip"><span>[0] Caneta</span><span>[1] Caderno</span><span>[2] Borracha</span></div>
+        </div>
+
+        <h3 class="subheading">Simulador de lista</h3>
+        <p class="instruction">Use o simulador para visualizar como os itens entram na lista e recebem índices.</p>
+
+        <div class="simulator simulator--list">
+          <div class="simulator__controls">
+            <label for="productInput">Produto</label>
+            <div class="input-row">
+              <input id="productInput" type="text" maxlength="40" placeholder="Ex.: Caneta" autocomplete="off">
+              <button class="btn btn--primary" type="button" id="addProduct">Adicionar</button>
+              <button class="btn btn--secondary" type="button" id="removeProduct">Remover último</button>
+              <button class="btn btn--ghost-dark" type="button" id="clearProducts">Limpar</button>
+            </div>
+            <p class="small-note">Esta é uma simulação didática em JavaScript para representar o comportamento de uma lista em Python.</p>
+          </div>
+          <div class="list-visual" id="listVisual" aria-live="polite"></div>
+          <pre class="live-code"><code id="listLiveCode">produtos = []</code></pre>
+        </div>
+
+        <div class="operations-grid">
+          <article><span>1</span><h4>Cadastrar</h4><p>Adicionar um novo dado à lista.</p></article>
+          <article><span>2</span><h4>Consultar</h4><p>Localizar um dado específico percorrendo os itens.</p></article>
+          <article><span>3</span><h4>Listar</h4><p>Exibir todos os dados armazenados.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--accent" id="registro1">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Registro 1 • Semana 22</span>
+          <h2>Finalizando a primeira versão do sistema</h2>
+          <p>A versão adaptada mantém o objetivo do roteiro original, mas parte de um código-base para caber em aproximadamente 25 minutos.</p>
+        </div>
+
+        <div class="source-choice">
+          <article class="source-card">
+            <span class="tag">ROTEIRO ORIGINAL</span>
+            <h3>Atividade oficial da Semana 22</h3>
+            <p>Inclui listagem, melhoria da apresentação, tratamento de lista vazia, resumo do estoque e desafios de evolução.</p>
+            <a class="btn btn--light" href="materiais/semana22/roteiro-original-semana22.docx" download>Baixar roteiro original</a>
+          </article>
+          <article class="source-card source-card--adapted">
+            <span class="tag">ATIVIDADE ADAPTADA</span>
+            <h3>Registro para esta sequência</h3>
+            <p>O cadastro e a consulta já vêm funcionando. O estudante implementa apenas listagem, tratamento da lista vazia e total de produtos.</p>
+            <a class="btn btn--light" href="registro1/atividade.py" download>Baixar código-base</a>
+          </article>
+        </div>
+
+        <div class="steps-card">
+          <div class="steps-card__head"><span class="tag">25 MINUTOS</span><h3>O que fazer</h3></div>
+          <ol class="activity-steps">
+            <li><div><strong>Criar <code>listar_produtos(produtos)</code></strong><span>Percorra a lista usando <code>for</code> e mostre os produtos cadastrados.</span></div></li>
+            <li><div><strong>Tratar lista vazia</strong><span>Se não houver produtos, exiba <code>Nenhum produto cadastrado.</code></span></div></li>
+            <li><div><strong>Mostrar o total</strong><span>Use <code>len(produtos)</code> para informar quantos produtos estão cadastrados.</span></div></li>
+            <li><div><strong>Testar o menu</strong><span>Cadastre alguns produtos, liste e confira se a saída está correta.</span></div></li>
+          </ol>
+          <div class="optional-challenge"><strong>Desafio opcional:</strong> impedir duplicados, ordenar por nome, remover um produto ou inserir no início da lista.</div>
+        </div>
+
+        <div class="evidence-box">
+          <strong>Evidência:</strong>
+          <span>arquivo <code>.py</code> + print do programa funcionando.</span>
+          <a class="text-link" href="registro1/INSTRUCOES.md">Abrir instruções completas</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="aula2">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Aula 2 • Semana 23</span>
+          <h2>Médias, faixas e classificação</h2>
+          <p>Agora os dados deixam de ser apenas armazenados: eles são processados para gerar decisões e organizar resultados.</p>
+        </div>
+
+        <div class="analogy-box analogy-box--blue">
+          <div class="analogy-box__icon" aria-hidden="true">🏆</div>
+          <div><strong>Analogia: classificação = tabela de campeonato.</strong><p>Primeiro coletamos resultados, depois calculamos, aplicamos regras e finalmente organizamos uma classificação.</p></div>
+        </div>
+
+        <div class="process-flow" aria-label="Fluxo de classificação">
+          <span>DADOS</span><b>→</b><span>CÁLCULO</span><b>→</b><span>MÉDIA</span><b>→</b><span>CLASSIFICAÇÃO</span><b>→</b><span>RESULTADO</span>
+        </div>
+
+        <div class="two-column">
+          <article class="panel">
+            <span class="tag">MÉDIA</span>
+            <h3>Calcular é uma etapa</h3>
+            <p>O programa processa os dados e produz um valor numérico.</p>
+            <pre><code>media = (10 + 12 + 8) / 3</code></pre>
+            <p class="panel-result">Resultado: <strong>10</strong></p>
+          </article>
+          <article class="panel">
+            <span class="tag">CLASSIFICAÇÃO</span>
+            <h3>Decidir é outra etapa</h3>
+            <p>Depois, a média é comparada com as faixas de desempenho.</p>
+            <pre><code>if media >= 30:
+    desempenho = "Alto"
+elif media >= 10:
+    desempenho = "Médio"
+else:
+    desempenho = "Baixo"</code></pre>
+          </article>
+        </div>
+
+        <article class="simulator simulator--classification">
+          <div class="simulator__head"><span class="tag">SIMULADOR</span><h3>Teste as faixas de desempenho</h3></div>
+          <div class="classification-controls">
+            <label for="averageInput">Média de vendas</label>
+            <input id="averageInput" type="number" min="0" max="10000" step="0.1" value="24">
+            <button class="btn btn--primary" type="button" id="classifyAverage">Classificar</button>
+          </div>
+          <div class="classification-result" id="classificationResult" aria-live="polite">
+            <small>Média 24</small><strong>Médio</strong><span>Regra aplicada: média ≥ 10 e &lt; 30</span>
+          </div>
+        </article>
+
+        <h3 class="subheading">Funções: separar para reutilizar</h3>
+        <div class="two-column">
+          <article class="code-explainer compact">
+            <div class="code-explainer__head"><div><span class="tag">FUNÇÃO</span><h3>Responsabilidade única</h3></div><button class="copy-btn" type="button" data-copy="functionCode">Copiar código</button></div>
+            <pre><code id="functionCode">def classificar_desempenho(media):
+    if media is None:
+        return "Sem histórico"
+    if media >= 30:
+        return "Alto"
+    elif media >= 10:
+        return "Médio"
+    return "Baixo"</code></pre>
+          </article>
+          <article class="function-flow">
+            <span>entrada</span><b>↓</b><span>função</span><b>↓</b><span>processamento</span><b>↓</b><span>return</span>
+            <p>Uma função concentra uma tarefa e pode ser reutilizada em vários produtos sem repetir a lógica.</p>
+          </article>
+        </div>
+
+        <h3 class="subheading">Ranking: ordenar os resultados</h3>
+        <p class="instruction">O exemplo usa a média armazenada na posição <code>1</code> de cada item e organiza do maior para o menor.</p>
+
+        <div class="ranking-lab">
+          <div class="ranking-lab__top">
+            <div><span class="tag">SIMULADOR</span><h3>Antes e depois da ordenação</h3></div>
+            <button class="btn btn--primary" type="button" id="sortRanking">Ordenar ranking</button>
+          </div>
+          <div class="ranking-columns">
+            <div><h4>Resultados</h4><ol class="ranking-list" id="rankingList"></ol></div>
+            <div class="ranking-code"><h4>Código de apoio</h4><pre><code>resultados.sort(
+    key=lambda item: item[1],
+    reverse=True
+)</code></pre><p>A expressão <code>item[1]</code> seleciona a média. <code>reverse=True</code> coloca as maiores primeiro.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--accent2" id="registro2">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Registro 2 • Semana 23</span>
+          <h2>Ranking de desempenho</h2>
+          <p>As funções de cálculo e classificação já vêm prontas. O foco do estudante será processar vários produtos, ordenar e exibir o ranking.</p>
+        </div>
+
+        <div class="source-choice">
+          <article class="source-card">
+            <span class="tag">ROTEIRO ORIGINAL</span>
+            <h3>Atividade oficial da Semana 23</h3>
+            <p>Processa vários produtos, organiza resultados, monta ranking, salva em <code>ranking.txt</code> e integra a funcionalidade ao menu.</p>
+            <a class="btn btn--primary" href="materiais/semana23/roteiro-original-semana23.docx" download>Baixar roteiro original</a>
+          </article>
+          <article class="source-card source-card--adapted">
+            <span class="tag">ATIVIDADE ADAPTADA</span>
+            <h3>Registro para esta sequência</h3>
+            <p><code>calcular_media_vendas()</code> e <code>classificar_desempenho()</code> estão prontas. O estudante monta e ordena a lista de resultados.</p>
+            <a class="btn btn--primary" href="registro2/atividade.py" download>Baixar código-base</a>
+          </article>
+        </div>
+
+        <div class="steps-card steps-card--plain">
+          <div class="steps-card__head"><span class="tag">25 MINUTOS</span><h3>O que fazer</h3></div>
+          <ol class="activity-steps">
+            <li><div><strong>Criar a lista <code>resultados</code></strong><span>Para cada produto, registre nome, média e desempenho.</span></div></li>
+            <li><div><strong>Ordenar pela média</strong><span>Use <code>sort(key=lambda item: item[1], reverse=True)</code>.</span></div></li>
+            <li><div><strong>Exibir o ranking</strong><span>Use <code>enumerate(..., start=1)</code> para gerar 1º, 2º, 3º...</span></div></li>
+          </ol>
+          <div class="optional-challenge"><strong>Desafio opcional:</strong> salvar o ranking em <code>ranking.txt</code> e integrar ao menu do sistema.</div>
+        </div>
+
+        <div class="evidence-box evidence-box--light">
+          <strong>Evidência:</strong>
+          <span>arquivo <code>.py</code> + print do ranking funcionando. Se fizer o desafio: incluir <code>ranking.txt</code>.</span>
+          <a class="text-link" href="registro2/INSTRUCOES.md">Abrir instruções completas</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--dark" id="trilha-final">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Fechamento</span>
+          <h2>Os conceitos trabalham juntos</h2>
+          <p>O objetivo não é decorar comandos isolados, mas perceber como cada estrutura participa de um programa completo.</p>
+        </div>
+        <div class="final-flow">
+          <span>Dados</span><b>→</b><span>Listas</span><b>→</b><span>Repetição</span><b>→</b><span>Cadastro</span><b>→</b><span>Funções</span><b>→</b><span>Média</span><b>→</b><span>Classificação</span><b>→</b><span>Ordenação</span><b>→</b><span>Ranking</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="materiais">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">Arquivos originais</span>
+          <h2>Materiais das aulas</h2>
+          <p>As apresentações e roteiros originais permanecem disponíveis. A adaptação do site serve apenas para organizar o conteúdo dentro das duas aulas de 50 minutos.</p>
+        </div>
+
+        <div class="materials-week">
+          <div class="materials-week__head"><span class="week-number">22</span><div><h3>Semana 22</h3><p>Agenda e cadastros em memória</p></div></div>
+          <div class="materials-grid">
+            <article class="material-card"><span class="material-icon">📘</span><span class="tag">AULA 1</span><h4>Como guardar dados sem usar arquivo</h4><p>Memória temporária, listas e índices.</p><a class="btn btn--ghost-dark" href="materiais/semana22/aula1.pptx" download>Baixar material</a></article>
+            <article class="material-card"><span class="material-icon">📘</span><span class="tag">AULA 2</span><h4>Incluir, consultar e listar</h4><p>Operações lógicas de um cadastro em memória.</p><a class="btn btn--ghost-dark" href="materiais/semana22/aula2.pptx" download>Baixar material</a></article>
+            <article class="material-card"><span class="material-icon">📘</span><span class="tag">AULA 3</span><h4>Cadastrando e consultando no projeto</h4><p>Implementação de cadastro e consulta com listas.</p><a class="btn btn--ghost-dark" href="materiais/semana22/aula3.pptx" download>Baixar material</a></article>
+            <article class="material-card"><span class="material-icon">📘</span><span class="tag">AULA 4</span><h4>Ampliando o cadastro com listagem</h4><p>Listagem e finalização da primeira versão do sistema.</p><a class="btn btn--ghost-dark" href="materiais/semana22/aula4.pptx" download>Baixar material</a></article>
+            <article class="material-card material-card--document"><span class="material-icon">📄</span><span class="tag">ROTEIRO ORIGINAL</span><h4>Finalizando a primeira versão do sistema</h4><p>Atividade prática oficial da Semana 22.</p><a class="btn btn--ghost-dark" href="materiais/semana22/roteiro-original-semana22.docx" download>Baixar roteiro</a></article>
+          </div>
+        </div>
+
+        <div class="materials-week">
+          <div class="materials-week__head"><span class="week-number week-number--blue">23</span><div><h3>Semana 23</h3><p>Médias, faixas e classificação</p></div></div>
+          <div class="materials-grid">
+            <article class="material-card"><span class="material-icon">📘</span><span class="tag">AULA 1</span><h4>De critérios a regras de classificação</h4><p>Média, faixas e condicionais para traduzir regras em decisões.</p><a class="btn btn--ghost-dark" href="materiais/semana23/aula1.pptx" download>Baixar material</a></article>
+            <article class="material-card"><span class="material-icon">📘</span><span class="tag">AULA 2</span><h4>Organizar o cálculo para ficar reutilizável</h4><p>Modularização, funções e reaproveitamento da lógica.</p><a class="btn btn--ghost-dark" href="materiais/semana23/aula2.pptx" download>Baixar material</a></article>
+            <article class="material-card"><span class="material-icon">📘</span><span class="tag">AULA 3</span><h4>Calculando médias e classificando no projeto</h4><p>Rotinas de cálculo e classificação aplicadas ao sistema.</p><a class="btn btn--ghost-dark" href="materiais/semana23/aula3.pptx" download>Baixar material</a></article>
+            <article class="material-card"><span class="material-icon">📘</span><span class="tag">AULA 4</span><h4>Ampliando com ranking</h4><p>Processamento de vários produtos, ordenação e ranking.</p><a class="btn btn--ghost-dark" href="materiais/semana23/aula4.pptx" download>Baixar material</a></article>
+            <article class="material-card material-card--document"><span class="material-icon">📄</span><span class="tag">ROTEIRO ORIGINAL</span><h4>Ampliando o sistema: ranking de desempenho</h4><p>Atividade prática oficial da Semana 23.</p><a class="btn btn--ghost-dark" href="materiais/semana23/roteiro-original-semana23.docx" download>Baixar roteiro</a></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--soft" id="quiz">
+      <div class="container quiz-container">
+        <div class="section-heading">
+          <span class="eyebrow">Revisão final</span>
+          <h2>Quiz das Semanas 22 e 23</h2>
+          <p>Responda e receba feedback imediato. O placar é atualizado a cada questão.</p>
+        </div>
+        <div class="quiz-score"><span>Acertos</span><strong><span id="scoreValue">0</span>/<span id="scoreTotal">0</span></strong></div>
+        <div class="quiz-list" id="quizList"></div>
+        <button class="btn btn--ghost-dark" id="resetQuiz" type="button">Refazer quiz</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div><strong>Lógica e Linguagem de Programação</strong><p>Material condensado — Semanas 22 e 23.</p></div>
+      <p>Site estático em HTML, CSS e JavaScript, compatível com GitHub Pages.</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Código copiado!</div>
+  <script src="script.js"></script>
+</body>
+</html>
